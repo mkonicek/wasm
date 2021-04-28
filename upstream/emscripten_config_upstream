@@ -1,0 +1,17 @@
+import os
+
+WASM_INSTALL = '/opt/s/w/ir/k/install'
+# this helps projects using emscripten find it
+EMSCRIPTEN_ROOT = os.path.join(WASM_INSTALL, 'emscripten')
+LLVM_ROOT = os.path.join(WASM_INSTALL, 'bin')
+BINARYEN_ROOT = os.path.join(WASM_INSTALL)
+
+prebuilt_node = '/opt/s/w/ir/cache/builder/emscripten-releases/node-v12.18.1-darwin-x64/bin/node'
+if not os.path.isfile(prebuilt_node):
+   prebuilt_node = None
+NODE_JS = os.path.expanduser(os.getenv('NODE') or prebuilt_node or '/usr/bin/nodejs')
+JAVA = '/opt/s/w/ir/cache/builder/emscripten-releases/jre-9.0.1.jre/Contents/Home/bin/java'
+
+# For testing only
+V8_ENGINE = os.path.join(WASM_INSTALL, 'bin', 'd8')
+JS_ENGINES = [NODE_JS]

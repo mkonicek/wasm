@@ -14,7 +14,9 @@ __pycache__
 
 # File that get download/extracted by emsdk itself
 /gnu
-/upstream
+/upstream/emscripten/node_modules
+/upstream/emscripten/tools
+/upstream/emscripten/src
 /fastcomp
 /fastcomp-clang/
 /llvm

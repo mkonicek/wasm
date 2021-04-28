@@ -1,0 +1,1 @@
+2.0.18|/Users/martinkonicek/code/emsdk/upstream/bin|13.0|0x4d64445a
