@@ -146,15 +146,6 @@ void fill_solid_rectangle(float x0, float y0, float x1, float y1, float r, float
   fill_textured_rectangle(x0, y0, x1, y1, r, g, b, a, solidColor);
 }
 
-typedef struct Texture
-{
-  // Image
-  char *url;
-  int w, h;
-
-  GLuint texture;
-} Texture;
-
 // END WEBGL LIB
 // ========================================================
 
@@ -192,9 +183,6 @@ EM_BOOL draw_frame(double t, void *)
       else if (emscripten_random() > SNOWINESS) flakes[i].y = HEIGHT, flakes[i].x = WIDTH*emscripten_random(); \
     } while(0)
   for(int i = 0; i < NUM_FLAKES/2; ++i) SIM;
-
-  // ground
-  fill_solid_rectangle(0.f, 0.f, WIDTH, 20.f, 0.8f, 0.8f, 0.8f, 1.f);
 
   // snow foreground
   for(int i = NUM_FLAKES/2; i < NUM_FLAKES; ++i) SIM;
