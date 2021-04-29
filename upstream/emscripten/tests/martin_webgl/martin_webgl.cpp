@@ -4,10 +4,28 @@
 #include <string.h> // For NULL and strcmp()
 #include <assert.h> // For assert()
 #include <emscripten.h>
-#include <emscripten/html5.h>
+#include <emscripten/html5.h> // Where is this file? How come emcc can find it?
+
+// Getting Started:
+// Compile this file with:
+//   emcc martin_webgl.cpp -o martin_webgl.html
+// Then start a local webserver:
+//   npx serve
+// Open the HTML file in the browser.
 
 #define WIDTH 1024
 #define HEIGHT 768
+
+// NOTE: The other example HelloTriangle is interesting, note that
+//       it uses the "framework" called esUtil which has this comment:
+//       "Just one iteration"
+//       We would have to adapt that esUtil to use emscripten_request_animation_frame_loop
+//       rather than the X-Window API XNextEvent.
+//
+// NOTE: Compiling C & C++ is tricky. Don't yet fully understand where the compiler & linker
+//       look for imports. The glbook has a Makefile - use emmake. I've seen CMakeLists.txt
+//       in other examples - what is that? Is CMake a different tool? And how to use it?
+//       Is it emcmake?
 
 // ========================================================
 // START WEBGL LIB
