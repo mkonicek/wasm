@@ -19,12 +19,12 @@ typedef struct { float x, y, vx, vy; } Flake;
 
 static Flake flakes[NUM_FLAKES] = {};
 
-void on_mouse_up(int button, int state, int mx, int my)
+void on_mouse_up(int button, int state, int mouse_x, int mouse_y)
 {
-    int x = mx;
+    int x = mouse_x;
     // Convert from canvas coordinates where 0 is at the top
     // to OpenGL where 0 is at the bottom.
-    int y = HEIGHT - my;
+    int y = HEIGHT - mouse_y;
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
         printf("on_mouse_up: x=%d, y=%d\n", x, y);
