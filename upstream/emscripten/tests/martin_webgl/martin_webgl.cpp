@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <GL/glut.h>
+
 #include <emscripten.h>
 #include <emscripten/html5.h> // Where is this file? How come emcc can find it?
 
@@ -33,6 +37,14 @@ typedef struct { double x, y, vx, vy; } Flake;
 
 static Flake flakes[NUM_FLAKES] = {};
 
+void onMouseUp(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+    {
+        printf("onMouseUp: x=%d, y=%d\n", x, y);
+    }
+}
+
 // Per-frame animation tick.
 EM_BOOL draw_frame(double t, void *userData)
 {
@@ -67,8 +79,10 @@ EM_BOOL draw_frame(double t, void *userData)
   return EM_TRUE;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
   init_webgl(WIDTH, HEIGHT);
+  glutInit(&argc, argv);
+  glutMouseFunc(&onMouseUp);
   emscripten_request_animation_frame_loop(&draw_frame, 0);
 }
