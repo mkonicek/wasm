@@ -10,8 +10,8 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
-#define NUM_FLAKES 30000
-#define FLAKE_SIZE 4
+#define NUM_FLAKES 50000
+#define FLAKE_SIZE 2
 #define FLAKE_SPEED 0.04
 #define SNOWINESS 0.998
 
@@ -37,7 +37,7 @@ void on_mouse_up(int button, int state, int mx, int my)
     }
 }
 
-// Per-frame animation tick.
+// Per-frame animation tick
 EM_BOOL draw_frame(double t, void *userData)
 {
   static double prevT;
@@ -49,14 +49,15 @@ EM_BOOL draw_frame(double t, void *userData)
   for (int i = 0; i < NUM_FLAKES; ++i) {
     flakes[i].y -= dt * flakes[i].vy;
     flakes[i].x += dt * flakes[i].vx;
-    float c = 0.5f + i * 0.5 / NUM_FLAKES;
+    // Vary the brightness of the flakes a bit
+    float brightness = 0.5f + i * 0.5 / NUM_FLAKES;
     if (flakes[i].y > 0) {
       fill_solid_rectangle(
         flakes[i].x,
         flakes[i].y,
-        flakes[i].x+FLAKE_SIZE,
-        flakes[i].y+FLAKE_SIZE,
-        c, c, c,
+        flakes[i].x + FLAKE_SIZE,
+        flakes[i].y + FLAKE_SIZE,
+        brightness, brightness, brightness,
         1.f);
     }
     else if (emscripten_random() > SNOWINESS) {
