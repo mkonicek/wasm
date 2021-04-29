@@ -17,9 +17,9 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
-#define NUM_FLAKES 2000
-#define FLAKE_SIZE 5
-#define FLAKE_SPEED 0.03
+#define NUM_FLAKES 30000
+#define FLAKE_SIZE 4
+#define FLAKE_SPEED 0.05
 #define SNOWINESS 0.998
 
 // NOTE: The other example HelloTriangle is interesting, note that
@@ -37,11 +37,22 @@ typedef struct { double x, y, vx, vy; } Flake;
 
 static Flake flakes[NUM_FLAKES] = {};
 
-void onMouseUp(int button, int state, int x, int y)
+void on_mouse_up(int button, int state, int mx, int my)
 {
+    int x = mx;
+    // Canvas y=0 is at the top
+    int y = HEIGHT - my;
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
-        printf("onMouseUp: x=%d, y=%d\n", x, y);
+        printf("on_mouse_up: x=%d, y=%d\n", x, y);
+        // Explode flakes away from the mouse
+        for (int i = 0; i < NUM_FLAKES; ++i) {
+          double dx = x - flakes[i].x;
+          double dy = y - flakes[i].y;
+          double distSquared = dx * dx + dy * dy;
+          flakes[i].vx = dx * 5 / distSquared;
+          flakes[i].vy = -dy * 5 / distSquared;
+        }
     }
 }
 
@@ -83,6 +94,6 @@ int main(int argc, char *argv[])
 {
   init_webgl(WIDTH, HEIGHT);
   glutInit(&argc, argv);
-  glutMouseFunc(&onMouseUp);
+  glutMouseFunc(&on_mouse_up);
   emscripten_request_animation_frame_loop(&draw_frame, 0);
 }
