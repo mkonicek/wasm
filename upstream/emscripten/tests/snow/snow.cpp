@@ -22,7 +22,8 @@ static Flake flakes[NUM_FLAKES] = {};
 void on_mouse_up(int button, int state, int mx, int my)
 {
     int x = mx;
-    // Canvas y=0 is at the top
+    // Convert from canvas coordinates where 0 is at the top
+    // to OpenGL where 0 is at the bottom.
     int y = HEIGHT - my;
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
