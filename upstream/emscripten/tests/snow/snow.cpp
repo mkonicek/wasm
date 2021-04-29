@@ -12,10 +12,10 @@
 
 #define NUM_FLAKES 50000
 #define FLAKE_SIZE 2
-#define FLAKE_SPEED 0.04
-#define SNOWINESS 0.998
+#define FLAKE_SPEED 0.04f
+#define SNOWINESS 0.998f
 
-typedef struct { double x, y, vx, vy; } Flake;
+typedef struct { float x, y, vx, vy; } Flake;
 
 static Flake flakes[NUM_FLAKES] = {};
 
@@ -28,9 +28,9 @@ void on_mouse_up(int button, int state, int mx, int my)
     {
         printf("on_mouse_up: x=%d, y=%d\n", x, y);
         for (int i = 0; i < NUM_FLAKES; ++i) {
-          double dx = x - flakes[i].x;
-          double dy = y - flakes[i].y;
-          double distSquared = dx * dx + dy * dy;
+          float dx = x - flakes[i].x;
+          float dy = y - flakes[i].y;
+          float distSquared = dx * dx + dy * dy;
           flakes[i].vx = dx * 5 / distSquared;
           flakes[i].vy = -dy * 5 / distSquared;
         }
@@ -50,7 +50,7 @@ EM_BOOL draw_frame(double t, void *userData)
     flakes[i].y -= dt * flakes[i].vy;
     flakes[i].x += dt * flakes[i].vx;
     // Vary the brightness of the flakes a bit
-    float brightness = 0.5f + i * 0.5 / NUM_FLAKES;
+    float brightness = 0.5f + i * 0.5f / NUM_FLAKES;
     if (flakes[i].y > 0) {
       fill_solid_rectangle(
         flakes[i].x,
@@ -64,8 +64,8 @@ EM_BOOL draw_frame(double t, void *userData)
       // Move the flake back to the top
       flakes[i].x = WIDTH * emscripten_random();
       flakes[i].y = HEIGHT;
-      flakes[i].vx = (emscripten_random() - 0.5) * 0.02;
-      flakes[i].vy = FLAKE_SPEED + i * 0.05 / NUM_FLAKES;
+      flakes[i].vx = (emscripten_random() - 0.5f) * 0.02f;
+      flakes[i].vy = FLAKE_SPEED + i * 0.05f / NUM_FLAKES;
     }
   }
 
