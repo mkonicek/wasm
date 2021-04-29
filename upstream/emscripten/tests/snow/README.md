@@ -12,7 +12,7 @@ This will output a few files in the current directory:
 - `snow.html` and `snow.js` - A single page web app.
 - `snow.wasm` - A binary WebAssembly file.
 
-Then start a local webserver:
+Start a local webserver:
 ```
 npx serve
 ```

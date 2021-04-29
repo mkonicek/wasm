@@ -10,7 +10,7 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
-#define NUM_FLAKES 10000
+#define NUM_FLAKES 30000
 #define FLAKE_SIZE 4
 #define FLAKE_SPEED 0.04
 #define SNOWINESS 0.998
