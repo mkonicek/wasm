@@ -32,8 +32,8 @@ void on_mouse_up(int button, int state, int mouse_x, int mouse_y)
           float dx = x - flakes[i].x;
           float dy = y - flakes[i].y;
           float distSquared = dx * dx + dy * dy;
-          flakes[i].vx = dx * 5 / distSquared;
-          flakes[i].vy = -dy * 5 / distSquared;
+          flakes[i].vx = dx * 5 / (distSquared + 0.1f);
+          flakes[i].vy = -dy * 5 / (distSquared + 0.1f);
         }
     }
 }
