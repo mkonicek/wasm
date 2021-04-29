@@ -122,18 +122,6 @@ void init_webgl(int width, int height)
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &whitePixel);
 }
 
-typedef void (*tick_func)(double t, double dt);
-
-static EM_BOOL tick(double time, void *userData)
-{
-  static double t0;
-  double dt = time - t0;
-  t0 = time;
-  tick_func f = (tick_func)(userData);
-  f(time, dt);
-  return EM_TRUE;
-}
-
 void clear_screen(float r, float g, float b, float a)
 {
   glClearColor(r, g, b, a);
@@ -142,7 +130,11 @@ void clear_screen(float r, float g, float b, float a)
 
 static void fill_textured_rectangle(float x0, float y0, float x1, float y1, float r, float g, float b, float a, GLuint texture)
 {
-  float mat[16] = { (x1-x0)*pixelWidth, 0, 0, 0, 0, (y1-y0)*pixelHeight, 0, 0, 0, 0, 1, 0, x0*pixelWidth-1.f, y0*pixelHeight-1.f, 0, 1};
+  float mat[16] = {
+    (x1-x0)*pixelWidth, 0, 0, 0,
+    0, (y1-y0)*pixelHeight, 0, 0,
+    0, 0, 1, 0,
+    x0*pixelWidth-1.f, y0*pixelHeight-1.f, 0, 1};
   glUniformMatrix4fv(matPos, 1, 0, mat);
   glUniform4f(colorPos, r, g, b, a);
   glBindTexture(GL_TEXTURE_2D, texture);
@@ -162,57 +154,6 @@ typedef struct Texture
 
   GLuint texture;
 } Texture;
-
-#define MAX_TEXTURES 256
-static Texture textures[MAX_TEXTURES] = {};
-
-static Texture *find_or_cache_url(const char *url)
-{
-  for(int i = 0; i < MAX_TEXTURES; ++i) // Naive O(n) lookup for tiny code size
-    if (!strcmp(textures[i].url, url))
-      return textures+i;
-    else if (!textures[i].url)
-    {
-      textures[i].url = strdup(url);
-      textures[i].texture = create_texture();
-      return textures+i;
-    }
-  return 0; // fail
-}
-
-void fill_image(float x0, float y0, float scale, float r, float g, float b, float a, const char *url)
-{
-  Texture *t = find_or_cache_url(url);
-  fill_textured_rectangle(x0, y0, x0 + t->w * scale, y0 + t->h * scale, r, g, b, a, t->texture);
-}
-
-typedef struct Glyph
-{
-  // Font
-  unsigned int ch;
-  int charSize;
-  int shadow;
-
-  GLuint texture;
-} Glyph;
-
-#define MAX_GLYPHS 256
-static Glyph glyphs[MAX_GLYPHS] = {};
-static Glyph *find_or_cache_character(unsigned int ch, int charSize, int shadow)
-{
-  for(int i = 0; i < MAX_TEXTURES; ++i) // Naive O(n) lookup for tiny code size
-    if (glyphs[i].ch == ch && glyphs[i].charSize == charSize && glyphs[i].shadow == shadow)
-      return glyphs+i;
-    else if (!glyphs[i].ch)
-    {
-      glyphs[i].ch = ch;
-      glyphs[i].charSize = charSize;
-      glyphs[i].shadow = shadow;
-      glyphs[i].texture = create_texture();
-      return glyphs+i;
-    }
-  return 0; // fail
-}
 
 // END WEBGL LIB
 // ========================================================
@@ -235,9 +176,6 @@ EM_BOOL draw_frame(double t, void *)
   prevT = t;
 
   clear_screen(0.1f, 0.2f, 0.3f, 1.f);
-
-  // moon
-  fill_image(WIDTH-250.f, HEIGHT - 250.f, 2.f, 1.f, 1.f, 1.f, 1.f, "moon.png");
 
   // snow background
 #define NUM_FLAKES 1000
