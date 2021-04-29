@@ -17,8 +17,8 @@
 #define HEIGHT 768
 
 #define NUM_FLAKES 2000
-#define FLAKE_SIZE 10/2
-#define FLAKE_SPEED 0.05f*0.5
+#define FLAKE_SIZE 5
+#define FLAKE_SPEED 0.03
 #define SNOWINESS 0.998
 
 // NOTE: The other example HelloTriangle is interesting, note that
@@ -165,6 +165,8 @@ float mod_dist(float v, float t)
   return fminf(d, 6.f - d);
 }
 
+static struct { float x, y; } flakes[NUM_FLAKES] = {};
+
 // Per-frame animation tick.
 EM_BOOL draw_frame(double t, void *)
 {
@@ -174,20 +176,13 @@ EM_BOOL draw_frame(double t, void *)
 
   clear_screen(0.1f, 0.2f, 0.3f, 1.f);
 
-
-  static struct { float x, y; } flakes[NUM_FLAKES] = {};
-
-#define SIM do { \
-      flakes[i].y -= dt*(FLAKE_SPEED+i*0.05f/NUM_FLAKES); \
-      flakes[i].x += dt*(fmodf(i*345362.f, 0.02f) - 0.01f); \
-      float c = 0.5f + i*0.5/NUM_FLAKES; \
-      if (flakes[i].y > -FLAKE_SIZE) fill_solid_rectangle(flakes[i].x, flakes[i].y, flakes[i].x+FLAKE_SIZE, flakes[i].y+FLAKE_SIZE, c, c, c, 1.f); \
-      else if (emscripten_random() > SNOWINESS) flakes[i].y = HEIGHT, flakes[i].x = WIDTH*emscripten_random(); \
-    } while(0)
-  for(int i = 0; i < NUM_FLAKES/2; ++i) SIM;
-
-  // snow foreground
-  for(int i = NUM_FLAKES/2; i < NUM_FLAKES; ++i) SIM;
+  for (int i = 0; i < NUM_FLAKES; ++i) {
+    flakes[i].y -= dt*(FLAKE_SPEED+i*0.05f/NUM_FLAKES);
+    flakes[i].x += dt*(fmodf(i*345362.f, 0.02f) - 0.01f);
+    float c = 0.5f + i*0.5/NUM_FLAKES;
+    if (flakes[i].y > -FLAKE_SIZE) fill_solid_rectangle(flakes[i].x, flakes[i].y, flakes[i].x+FLAKE_SIZE, flakes[i].y+FLAKE_SIZE, c, c, c, 1.f);
+    else if (emscripten_random() > SNOWINESS) flakes[i].y = HEIGHT, flakes[i].x = WIDTH*emscripten_random();
+  }
 
   return EM_TRUE;
 }
