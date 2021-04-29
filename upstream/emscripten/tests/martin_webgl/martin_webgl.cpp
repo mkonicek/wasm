@@ -16,6 +16,11 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
+#define NUM_FLAKES 2000
+#define FLAKE_SIZE 10/2
+#define FLAKE_SPEED 0.05f*0.5
+#define SNOWINESS 0.998
+
 // NOTE: The other example HelloTriangle is interesting, note that
 //       it uses the "framework" called esUtil which has this comment:
 //       "Just one iteration"
@@ -159,6 +164,7 @@ float mod_dist(float v, float t)
   float d = fabsf(v - t);
   return fminf(d, 6.f - d);
 }
+
 // Per-frame animation tick.
 EM_BOOL draw_frame(double t, void *)
 {
@@ -168,11 +174,7 @@ EM_BOOL draw_frame(double t, void *)
 
   clear_screen(0.1f, 0.2f, 0.3f, 1.f);
 
-  // snow background
-#define NUM_FLAKES 1000
-#define FLAKE_SIZE 10
-#define FLAKE_SPEED 0.05f
-#define SNOWINESS 0.998
+
   static struct { float x, y; } flakes[NUM_FLAKES] = {};
 
 #define SIM do { \
