@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 
 #include <emscripten.h>
-#include <emscripten/html5.h> // Where is this file? How come emcc can find it?
+#include <emscripten/html5.h>
 
 #include "util.h"
 
