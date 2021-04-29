@@ -29,7 +29,9 @@
 //       in other examples - what is that? Is CMake a different tool? And how to use it?
 //       Is it emcmake?
 
-static struct { float x, y; } flakes[NUM_FLAKES] = {};
+typedef struct { double x, y, vx, vy; } Flake;
+
+static Flake flakes[NUM_FLAKES] = {};
 
 // Per-frame animation tick.
 EM_BOOL draw_frame(double t, void *userData)
@@ -41,10 +43,10 @@ EM_BOOL draw_frame(double t, void *userData)
   clear_screen(0.1f, 0.2f, 0.3f, 1.f);
 
   for (int i = 0; i < NUM_FLAKES; ++i) {
-    flakes[i].y -= dt * (FLAKE_SPEED + i * 0.05 / NUM_FLAKES);
-    flakes[i].x += dt * (fmodf(i * 345362.f, 0.02) - 0.01);
+    flakes[i].y -= dt * flakes[i].vy;
+    flakes[i].x += dt * flakes[i].vx;
     float c = 0.5f + i * 0.5 / NUM_FLAKES;
-    if (flakes[i].y > -FLAKE_SIZE) {
+    if (flakes[i].y > 0) {
       fill_solid_rectangle(
         flakes[i].x,
         flakes[i].y,
@@ -55,8 +57,10 @@ EM_BOOL draw_frame(double t, void *userData)
     }
     else if (emscripten_random() > SNOWINESS) {
       // Move the flake back to the top
-      flakes[i].y = HEIGHT;
       flakes[i].x = WIDTH * emscripten_random();
+      flakes[i].y = HEIGHT;
+      flakes[i].vx = fmodf(i * 345362.f, 0.02) - 0.01;
+      flakes[i].vy = FLAKE_SPEED + i * 0.05 / NUM_FLAKES;
     }
   }
 
