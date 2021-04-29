@@ -27,7 +27,6 @@ void on_mouse_up(int button, int state, int mx, int my)
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
         printf("on_mouse_up: x=%d, y=%d\n", x, y);
-        // Explode flakes away from the mouse
         for (int i = 0; i < NUM_FLAKES; ++i) {
           double dx = x - flakes[i].x;
           double dy = y - flakes[i].y;
