@@ -7,31 +7,13 @@
 
 #include "util.h"
 
-// Getting Started:
-// Compile this file with:
-//   emcc martin_webgl.cpp -o martin_webgl.html
-// Then start a local webserver:
-//   npx serve
-// Open the HTML file in the browser.
-
 #define WIDTH 1024
 #define HEIGHT 768
 
-#define NUM_FLAKES 30000
+#define NUM_FLAKES 10000
 #define FLAKE_SIZE 4
-#define FLAKE_SPEED 0.05
+#define FLAKE_SPEED 0.04
 #define SNOWINESS 0.998
-
-// NOTE: The other example HelloTriangle is interesting, note that
-//       it uses the "framework" called esUtil which has this comment:
-//       "Just one iteration"
-//       We would have to adapt that esUtil to use emscripten_request_animation_frame_loop
-//       rather than the X-Window API XNextEvent.
-//
-// NOTE: Compiling C & C++ is tricky. Don't yet fully understand where the compiler & linker
-//       look for imports. The glbook has a Makefile - use emmake. I've seen CMakeLists.txt
-//       in other examples - what is that? Is CMake a different tool? And how to use it?
-//       Is it emcmake?
 
 typedef struct { double x, y, vx, vy; } Flake;
 
@@ -82,7 +64,7 @@ EM_BOOL draw_frame(double t, void *userData)
       // Move the flake back to the top
       flakes[i].x = WIDTH * emscripten_random();
       flakes[i].y = HEIGHT;
-      flakes[i].vx = fmodf(i * 345362.f, 0.02) - 0.01;
+      flakes[i].vx = (emscripten_random() - 0.5) * 0.02;
       flakes[i].vy = FLAKE_SPEED + i * 0.05 / NUM_FLAKES;
     }
   }
