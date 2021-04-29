@@ -214,20 +214,6 @@ static Glyph *find_or_cache_character(unsigned int ch, int charSize, int shadow)
   return 0; // fail
 }
 
-void fill_char(float x0, float y0, float r, float g, float b, float a, unsigned int ch, int charSize, int shadow)
-{
-  fill_textured_rectangle(x0, y0, x0+charSize, y0+charSize, r, g, b, a, find_or_cache_character(ch, charSize, shadow)->texture);
-}
-
-void fill_text(float x0, float y0, float r, float g, float b, float a, const char *str, float spacing, int charSize, int shadow)
-{
-  while(*str)
-  {
-    fill_char(x0, y0, r, g, b, a, *str++, charSize, shadow);
-    x0 += spacing;
-  }
-}
-
 // END WEBGL LIB
 // ========================================================
 
@@ -254,7 +240,7 @@ EM_BOOL draw_frame(double t, void *)
   fill_image(WIDTH-250.f, HEIGHT - 250.f, 2.f, 1.f, 1.f, 1.f, 1.f, "moon.png");
 
   // snow background
-#define NUM_FLAKES 100
+#define NUM_FLAKES 1000
 #define FLAKE_SIZE 10
 #define FLAKE_SPEED 0.05f
 #define SNOWINESS 0.998
@@ -271,18 +257,6 @@ EM_BOOL draw_frame(double t, void *)
 
   // ground
   fill_solid_rectangle(0.f, 0.f, WIDTH, 20.f, 0.8f, 0.8f, 0.8f, 1.f);
-
-  // text
-  const char text[] = "HELLO WEBGL";
-  for(size_t i = 0; i < strlen(text); ++i)
-  {
-    float c = fmodf(t*0.005f + i*0.3f, 6.f);
-    fill_char(190.f + i*64.f, HEIGHT*2/6 + sinf(t*0.005f+i*0.3f)*100.f,
-      clamp01(2.f - mod_dist(c, 0.f)),
-      clamp01(2.f - mod_dist(c, 2.f)),
-      clamp01(2.f - mod_dist(c, 4.f)),
-      1.f, text[i], 64.f, true);
-  }
 
   // snow foreground
   for(int i = NUM_FLAKES/2; i < NUM_FLAKES; ++i) SIM;
