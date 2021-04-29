@@ -15,9 +15,9 @@
 #define FLAKE_SPEED 0.04f
 #define SNOWINESS 0.998f
 
-typedef struct { float x, y, vx, vy; } Flake;
+struct Flake { float x, y, vx, vy; };
 
-static Flake flakes[NUM_FLAKES] = {};
+static struct Flake flakes[NUM_FLAKES] = {};
 
 void on_mouse_up(int button, int state, int mouse_x, int mouse_y)
 {
