@@ -120,14 +120,3 @@ void fill_solid_rectangle(float x0, float y0, float x1, float y1, float r, float
 {
   fill_textured_rectangle(x0, y0, x1, y1, r, g, b, a, solidColor);
 }
-
-float clamp01(float v)
-{
-  return v < 0.f ? 0.f : (v > 1.f ? 1.f : v);
-}
-
-float mod_dist(float v, float t)
-{
-  float d = fabsf(v - t);
-  return fminf(d, 6.f - d);
-}
