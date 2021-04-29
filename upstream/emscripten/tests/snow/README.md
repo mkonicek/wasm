@@ -19,7 +19,7 @@ npx serve
 
 Open the generated single page app: http://localhost:5000/snow
 
-The app will make an XHR request to fetch `snow.wasm`, and run it.
+The app will fetch and run `snow.wasm`.
 
 Try clicking different points on the canvas to create something interesting. Here is an example:
 
